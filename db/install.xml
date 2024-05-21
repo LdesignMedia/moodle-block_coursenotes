@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/course_notes/db" VERSION="2023052100" COMMENT="XMLDB file for course_notes block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+<XMLDB PATH="blocks/coursenotes/db" VERSION="2023052100" COMMENT="XMLDB file for course_notes block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
     <TABLES>
-        <TABLE NAME="block_course_notes">
+        <TABLE NAME="block_coursenotes">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" UNSIGNED="true" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="userid" TYPE="int" LENGTH="10" UNSIGNED="true" NOTNULL="true"/>
                 <FIELD NAME="courseid" TYPE="int" LENGTH="10" UNSIGNED="true" NOTNULL="true"/>
-                <FIELD NAME="note" TYPE="text" NOTNULL="true"/>
+                <FIELD NAME="coursenote" TYPE="text" NOTNULL="true"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

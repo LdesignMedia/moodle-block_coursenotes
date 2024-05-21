@@ -24,9 +24,9 @@
  * @author    Nihaal Shaikh
  */
 
-class block_course_notes extends block_base {
+class block_coursenotes extends block_base {
     public function init() {
-        $this->title = get_string('coursenotes', 'block_course_notes');
+        $this->title = get_string('coursenotes', 'block_coursenotes');
     }
 
     public function get_content() {
@@ -39,30 +39,30 @@ class block_course_notes extends block_base {
         $this->content = new stdClass();
         $this->content->text = '';
 
-        $notes = $DB->get_record('block_course_notes', array('userid' => $USER->id, 'courseid' => $COURSE->id));
+        $notes = $DB->get_record('block_coursenotes', array('userid' => $USER->id, 'courseid' => $COURSE->id));
 
         if ($notes) {
             $this->content->text .= format_text($notes->note);
         } else {
-            $this->content->text .= get_string('nonotes', 'block_course_notes');
+            $this->content->text .= get_string('nonotes', 'block_coursenotes');
         }
 
         $this->content->text .= '<form method="post" action="">';
-        $this->content->text .= '<textarea name="course_note" rows="4" cols="50">' . ($notes ? $notes->note : '') . '</textarea>';
-        $this->content->text .= '<input type="submit" value="' . get_string('savenote', 'block_course_notes') . '">';
+        $this->content->text .= '<textarea name="coursenote" rows="4" cols="50">' . ($notes ? $notes->note : '') . '</textarea>';
+        $this->content->text .= '<input type="submit" value="' . get_string('savenote', 'block_coursenotes') . '">';
         $this->content->text .= '</form>';
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['course_note'])) {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['coursenote'])) {
             $note = new stdClass();
             $note->userid = $USER->id;
             $note->courseid = $COURSE->id;
-            $note->note = $_POST['course_note'];
+            $note->note = $_POST['coursenote'];
 
             if ($notes) {
                 $note->id = $notes->id;
-                $DB->update_record('block_course_notes', $note);
+                $DB->update_record('block_coursenotes', $note);
             } else {
-                $DB->insert_record('block_course_notes', $note);
+                $DB->insert_record('block_coursenotes', $note);
             }
 
             // Refresh the page to see the changes.
