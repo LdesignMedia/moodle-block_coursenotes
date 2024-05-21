@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/coursenotes/db" VERSION="2023052100" COMMENT="XMLDB file for course_notes block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+<XMLDB PATH="blocks/coursenotes/db" VERSION="2023052100" COMMENT="XMLDB file for coursenotes block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
     <TABLES>
-        <TABLE NAME="block_coursenotes">
+        <TABLE NAME="block_coursenotes" COMMENT="Table to store course notes">
             <FIELDS>
-                <FIELD NAME="id" TYPE="int" LENGTH="10" UNSIGNED="true" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="userid" TYPE="int" LENGTH="10" UNSIGNED="true" NOTNULL="true"/>
-                <FIELD NAME="courseid" TYPE="int" LENGTH="10" UNSIGNED="true" NOTNULL="true"/>
-                <FIELD NAME="coursenote" TYPE="text" NOTNULL="true"/>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" UNSIGNED="true" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" UNSIGNED="true" NOTNULL="true" COMMENT="User ID"/>
+                <FIELD NAME="courseid" TYPE="int" LENGTH="10" UNSIGNED="true" NOTNULL="true" COMMENT="Course ID"/>
+                <FIELD NAME="note" TYPE="text" NOTNULL="true" COMMENT="Course note"/>
             </FIELDS>
             <KEYS>
-                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
             </KEYS>
         </TABLE>
     </TABLES>
