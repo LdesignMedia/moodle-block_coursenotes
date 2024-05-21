@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'block_comments', language 'en', branch 'MOODLE_20_STABLE'
+ * Strings for component 'block_coursenotes', language 'en', branch 'MOODLE_20_STABLE'
  *
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
@@ -25,7 +25,7 @@
  * @author    Nihaal Shaikh
  */
 
-$string['coursenotes:myaddinstance'] = 'Add a new course note block to Dashboard';
-$string['coursenotes:addinstance'] = 'Add a new course note block';
 $string['pluginname'] = 'Course Notes';
-$string['privacy:metadata:core_coursenote'] = 'A record of course notes added.';
+$string['coursenotes'] = 'Course Notes';
+$string['nonotes'] = 'No notes yet';
+$string['savenote'] = 'Save Note';

@@ -23,79 +23,56 @@
  * @copyright 21/05/2024 Mfreak.nl | LdesignMedia.nl - Luuk Verhoeven
  * @author    Nihaal Shaikh
  */
-class block_coursenotes extends block_base {
 
-    function init() {
-        global $CFG;
-
-        require_once($CFG->dirroot . '/coursenote/lib.php');
-
-        $this->title = get_string('pluginname', 'block_coursenotes');
+class block_course_notes extends block_base {
+    public function init() {
+        $this->title = get_string('coursenotes', 'block_course_notes');
     }
 
-    function specialization() {
-        // require js for commenting
-        coursenote::init();
-    }
-    function applicable_formats() {
-        return array('all' => true);
-    }
+    public function get_content() {
+        global $USER, $DB, $COURSE;
 
-    function instance_allow_multiple() {
-        return false;
-    }
-
-    function get_content() {
-        global $CFG;
-
-        if ($this->content !== NULL) {
+        if ($this->content !== null) {
             return $this->content;
         }
-        if (!$CFG->usecomments) {
-            $this->content = new stdClass();
-            $this->content->text = '';
-            if ($this->page->user_is_editing()) {
-                $this->content->text = get_string('disabledcomments');
-            }
-            return $this->content;
-        }
+
         $this->content = new stdClass();
-        $this->content->footer = '';
         $this->content->text = '';
-        if (empty($this->instance)) {
-            return $this->content;
+
+        $notes = $DB->get_record('block_course_notes', array('userid' => $USER->id, 'courseid' => $COURSE->id));
+
+        if ($notes) {
+            $this->content->text .= format_text($notes->note);
+        } else {
+            $this->content->text .= get_string('nonotes', 'block_course_notes');
         }
-        [$context, $course, $cm] = get_context_info_array($this->page->context->id);
 
-        $args = new stdClass;
-        $args->context   = $this->page->context;
-        $args->course    = $course;
-        $args->area      = 'page_coursenotes';
-        $args->itemid    = 0;
-        $args->component = 'block_coursenotes';
-        $args->linktext  = get_string('showcoursenotes');
-        $args->notoggle  = true;
-        $args->autostart = true;
-        $args->displaycancel = false;
-        $coursenote = new coursenote($args);
-        $coursenote->set_view_permission(true);
-        $coursenote->set_fullwidth();
+        $this->content->text .= '<form method="post" action="">';
+        $this->content->text .= '<textarea name="course_note" rows="4" cols="50">' . ($notes ? $notes->note : '') . '</textarea>';
+        $this->content->text .= '<input type="submit" value="' . get_string('savenote', 'block_course_notes') . '">';
+        $this->content->text .= '</form>';
 
-        $this->content = new stdClass();
-        $this->content->text = $coursenote->output(true);
-        $this->content->footer = '';
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['course_note'])) {
+            $note = new stdClass();
+            $note->userid = $USER->id;
+            $note->courseid = $COURSE->id;
+            $note->note = $_POST['course_note'];
+
+            if ($notes) {
+                $note->id = $notes->id;
+                $DB->update_record('block_course_notes', $note);
+            } else {
+                $DB->insert_record('block_course_notes', $note);
+            }
+
+            // Refresh the page to see the changes.
+            redirect(new moodle_url('/course/view.php', array('id' => $COURSE->id)));
+        }
+
         return $this->content;
     }
 
-    /**
-     * This block shouldn't be added to a page if the comments advanced feature is disabled.
-     *
-     * @param moodle_page $page
-     * @return bool
-     */
-    public function can_block_be_added(moodle_page $page): bool {
-        global $CFG;
-
-        return $CFG->usecoursenotes;
+    public function applicable_formats() {
+        return array('course-view' => true);
     }
 }
