@@ -23,40 +23,48 @@
  * @copyright 21/05/2024 Mfreak.nl | LdesignMedia.nl - Luuk Verhoeven
  * @author    Nihaal Shaikh
  */
-
 class block_coursenotes extends block_base {
+
     public function init() {
         $this->title = get_string('coursenotes', 'block_coursenotes');
     }
 
     public function get_content() {
-        global $USER, $DB, $COURSE;
+        global $USER, $DB, $COURSE, $OUTPUT;
 
         if ($this->content !== null) {
             return $this->content;
         }
 
         $this->content = new stdClass();
-        $this->content->text = '';
 
-        $notes = $DB->get_record('block_coursenotes', array('userid' => $USER->id, 'courseid' => $COURSE->id));
+        // Prepare data for the template
+        $data = [
+            'title' => $this->title,
+            'content' => '',
+            'coursenote' => '',
+            'savebutton' => get_string('savenote', 'block_coursenotes'),
+        ];
 
+        // Fetch notes from the database.
+        $notes = $DB->get_record('block_coursenotes', ['userid' => $USER->id, 'courseid' => $COURSE->id]);
         if ($notes) {
-            $this->content->text .= format_text($notes->note);
+            $data['content'] = format_text($notes->coursenote);
+            $data['coursenote'] = $notes->coursenote;
         } else {
-            $this->content->text .= get_string('nonotes', 'block_coursenotes');
+            $data['content'] = get_string('nonotes', 'block_coursenotes');
         }
 
-        $this->content->text .= '<form method="post" action="">';
-        $this->content->text .= '<textarea name="coursenote" rows="4" cols="50">' . ($notes ? $notes->note : '') . '</textarea>';
-        $this->content->text .= '<input type="submit" value="' . get_string('savenote', 'block_coursenotes') . '">';
-        $this->content->text .= '</form>';
+        // Render the Mustache template.
+        $templatecontext = (object) array_merge($data, ['output' => $OUTPUT]);
+        $this->content->text = $OUTPUT->render_from_template('block_coursenotes/block', $templatecontext);
 
+        // Handle form submission.
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['coursenote'])) {
             $note = new stdClass();
             $note->userid = $USER->id;
             $note->courseid = $COURSE->id;
-            $note->note = $_POST['coursenote'];
+            $note->coursenote = $_POST['coursenote'];
 
             if ($notes) {
                 $note->id = $notes->id;
@@ -66,13 +74,14 @@ class block_coursenotes extends block_base {
             }
 
             // Refresh the page to see the changes.
-            redirect(new moodle_url('/course/view.php', array('id' => $COURSE->id)));
+            redirect(new moodle_url('/course/view.php', ['id' => $COURSE->id]));
         }
 
         return $this->content;
     }
 
     public function applicable_formats() {
-        return array('course-view' => true);
+        return ['course-view' => true, 'site-index' => false, 'my' => true];
     }
+
 }

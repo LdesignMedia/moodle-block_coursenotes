@@ -6,7 +6,7 @@
                 <FIELD NAME="id" TYPE="int" LENGTH="10" UNSIGNED="true" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
                 <FIELD NAME="userid" TYPE="int" LENGTH="10" UNSIGNED="true" NOTNULL="true" COMMENT="User ID"/>
                 <FIELD NAME="courseid" TYPE="int" LENGTH="10" UNSIGNED="true" NOTNULL="true" COMMENT="Course ID"/>
-                <FIELD NAME="note" TYPE="text" NOTNULL="true" COMMENT="Course note"/>
+                <FIELD NAME="coursenote" TYPE="text" NOTNULL="true" COMMENT="Course note"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
