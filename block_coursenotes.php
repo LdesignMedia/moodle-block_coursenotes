@@ -36,7 +36,11 @@ class block_coursenotes extends block_base {
             return $this->content;
         }
 
+        $this->page->requires->js_call_amd('block_coursenotes/coursenotes', 'init');
         $this->content = new stdClass();
+
+        // Check if we are in edit mode
+        $edit_mode = isset($_GET['edit']) && $_GET['edit'] == 1;
 
         // Prepare data for the template
         $data = [
@@ -44,10 +48,16 @@ class block_coursenotes extends block_base {
             'content' => '',
             'coursenote' => '',
             'savebutton' => get_string('savenote', 'block_coursenotes'),
+            'edit_mode' => $edit_mode,
         ];
 
-        // Fetch notes from the database.
-        $notes = $DB->get_record('block_coursenotes', ['userid' => $USER->id, 'courseid' => $COURSE->id, 'blockinstanceid' => $this->context->instanceid]);
+        // Fetch notes from the database based on instance id
+        $conditions = [
+            'userid' => $USER->id,
+            'courseid' => $COURSE->id,
+            'blockinstanceid' => $this->context->instanceid,
+        ];
+        $notes = $DB->get_record('block_coursenotes', $conditions);
         if ($notes) {
             $data['coursenote'] = $notes->coursenote;
         }
@@ -56,8 +66,6 @@ class block_coursenotes extends block_base {
         $templatecontext = (object) array_merge($data, ['output' => $OUTPUT]);
         $this->content->text = $OUTPUT->render_from_template('block_coursenotes/block', $templatecontext);
 
-        //echo '<pre>';print_r($this->context->instanceid);echo "</pre>\n\n";
-        //die(__LINE__.' '.__FILE__);
         // Handle form submission.
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['coursenote'])) {
             $note = new stdClass();
@@ -65,6 +73,7 @@ class block_coursenotes extends block_base {
             $note->courseid = $COURSE->id;
             $note->blockinstanceid = $this->context->instanceid;
             $note->coursenote = $_POST['coursenote'];
+
             if ($notes) {
                 $note->id = $notes->id;
                 $DB->update_record('block_coursenotes', $note);
@@ -82,14 +91,4 @@ class block_coursenotes extends block_base {
     public function applicable_formats() {
         return ['course-view' => true, 'site-index' => false, 'my' => true];
     }
-
-    /**
-     * Allow multiple instances
-     *
-     * @return bool
-     */
-    public function instance_allow_multiple(): bool {
-        return true;
-    }
-
 }
