@@ -47,25 +47,24 @@ class block_coursenotes extends block_base {
         ];
 
         // Fetch notes from the database.
-        $notes = $DB->get_record('block_coursenotes', ['userid' => $USER->id, 'courseid' => $COURSE->id]);
+        $notes = $DB->get_record('block_coursenotes', ['userid' => $USER->id, 'courseid' => $COURSE->id, 'blockinstanceid' => $this->context->instanceid]);
         if ($notes) {
-            $data['content'] = format_text($notes->coursenote);
             $data['coursenote'] = $notes->coursenote;
-        } else {
-            $data['content'] = get_string('nonotes', 'block_coursenotes');
         }
 
         // Render the Mustache template.
         $templatecontext = (object) array_merge($data, ['output' => $OUTPUT]);
         $this->content->text = $OUTPUT->render_from_template('block_coursenotes/block', $templatecontext);
 
+        //echo '<pre>';print_r($this->context->instanceid);echo "</pre>\n\n";
+        //die(__LINE__.' '.__FILE__);
         // Handle form submission.
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['coursenote'])) {
             $note = new stdClass();
             $note->userid = $USER->id;
             $note->courseid = $COURSE->id;
+            $note->blockinstanceid = $this->context->instanceid;
             $note->coursenote = $_POST['coursenote'];
-
             if ($notes) {
                 $note->id = $notes->id;
                 $DB->update_record('block_coursenotes', $note);
@@ -82,6 +81,15 @@ class block_coursenotes extends block_base {
 
     public function applicable_formats() {
         return ['course-view' => true, 'site-index' => false, 'my' => true];
+    }
+
+    /**
+     * Allow multiple instances
+     *
+     * @return bool
+     */
+    public function instance_allow_multiple(): bool {
+        return true;
     }
 
 }

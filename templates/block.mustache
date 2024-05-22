@@ -1,11 +1,11 @@
 <div class="course-notes-block">
     <h2>{{#title}} {{title}} {{/title}}</h2>
     <div class="content">
-        {{#note}}{{note}}{{/note}}
+        {{#coursenote}}{{coursenote}}{{/coursenote}}
     </div>
     <form method="post" action="">
         <label>
-            <textarea name="course_note" rows="4" cols="50"></textarea>
+            <textarea name="coursenote" rows="4" cols="50"></textarea>
         </label>
         <input type="submit" value="{{#savebutton}} {{savebutton}} {{/savebutton}}">
     </form>
