@@ -14,6 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
+require_once(__DIR__ . '/externallib.php');
+
 /**
  * The coursenotes block
  *
@@ -39,27 +43,27 @@ class block_coursenotes extends block_base {
         $this->page->requires->js_call_amd('block_coursenotes/coursenotes', 'init');
         $this->content = new stdClass();
 
-        // Check if we are in edit mode
-        $edit_mode = isset($_GET['edit']) && $_GET['edit'] == 1;
-
-        // Prepare data for the template
+        // Prepare data for the template.
         $data = [
             'title' => $this->title,
             'content' => '',
             'coursenote' => '',
             'savebutton' => get_string('savenote', 'block_coursenotes'),
-            'edit_mode' => $edit_mode,
+            'blockinstanceid' => $this->context->instanceid,
+            'courseid' => $COURSE->id,
         ];
 
-        // Fetch notes from the database based on instance id
+        // Fetch notes from the database based on instance id.
         $conditions = [
             'userid' => $USER->id,
             'courseid' => $COURSE->id,
             'blockinstanceid' => $this->context->instanceid,
         ];
-        $notes = $DB->get_record('block_coursenotes', $conditions);
+        $notes = $DB->get_records('block_coursenotes', $conditions, 'timecreated DESC', '*', 0, 1);
+
         if ($notes) {
-            $data['coursenote'] = $notes->coursenote;
+            $latestnote = reset($notes); // Get the first (latest) record.
+            $data['coursenote'] = $latestnote->coursenote;
         }
 
         // Render the Mustache template.
@@ -68,19 +72,8 @@ class block_coursenotes extends block_base {
 
         // Handle form submission.
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['coursenote'])) {
-            $note = new stdClass();
-            $note->userid = $USER->id;
-            $note->courseid = $COURSE->id;
-            $note->blockinstanceid = $this->context->instanceid;
-            $note->coursenote = $_POST['coursenote'];
-
-            if ($notes) {
-                $note->id = $notes->id;
-                $DB->update_record('block_coursenotes', $note);
-            } else {
-                $DB->insert_record('block_coursenotes', $note);
-            }
-
+            // Save the note.
+            block_coursenotes_external::save_note($_POST['coursenote'], $this->context->instanceid, $COURSE->id);
             // Refresh the page to see the changes.
             redirect(new moodle_url('/course/view.php', ['id' => $COURSE->id]));
         }

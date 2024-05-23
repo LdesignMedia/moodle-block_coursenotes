@@ -14,18 +14,24 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Version details
- *
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
- * @package   block_coursenotes
- * @copyright 21/05/2024 Mfreak.nl | LdesignMedia.nl - Luuk Verhoeven
- * @author    Nihaal Shaikh
- */
-
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2024052109;
-$plugin->requires  = 2022111800;
-$plugin->component = 'block_coursenotes';
+$functions = array(
+    'block_coursenotes_save_note' => array(
+        'classname'   => 'block_coursenotes_external',
+        'methodname'  => 'save_note',
+        'classpath'   => 'blocks/coursenotes/externallib.php',
+        'description' => 'Save the course note if conditions are met',
+        'type'        => 'write',
+        'ajax'        => true,
+        'capabilities' => 'block/coursenotes:myaddinstance',
+    ),
+);
+
+$services = array(
+    'coursenotes_service' => array(
+        'functions' => array ('block_coursenotes_save_note'),
+        'restrictedusers' => 0,
+        'enabled' => 1,
+    ),
+);
