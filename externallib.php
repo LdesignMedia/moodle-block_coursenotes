@@ -51,6 +51,11 @@ class block_coursenotes_external extends external_api {
         ];
         $notes = $DB->get_records('block_coursenotes', $conditions, 'timecreated ASC');
 
+        // Check if the new note is the same as the latest note.
+        if (!empty($notes) && helper::isduplicate($params, $notes)) {
+            return ['status' => false, 'message' => 'Note is the same as the latest one'];
+        }
+
         // If the user has 10 or more notes, delete the oldest one.
         helper::deleteoldestnoteifneeded($notes);
 

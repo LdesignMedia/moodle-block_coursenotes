@@ -23,12 +23,12 @@
  * @copyright 23/05/2024 Mfreak.nl | LdesignMedia.nl - Luuk Verhoeven
  * @author    Nihaal Shaikh
  */
-
 class helper {
 
     /**
      * Will delete the oldest coursenote before saving the new one if total coursenotes for the
      * course are > 10
+     *
      * @param $notes
      *
      * @return void
@@ -63,9 +63,26 @@ class helper {
 
         try {
             $DB->insert_record('block_coursenotes', $note);
+
             return ['status' => true, 'message' => 'Note saved successfully'];
         } catch (Exception $e) {
             return ['status' => false, 'message' => 'Error saving note: ' . $e->getMessage()];
         }
+    }
+
+    /**
+     * Check if the new note is the same as the latest note
+     *
+     * @param $params
+     * @param $notes
+     *
+     * @return bool
+     */
+    public static function isduplicate($params, $notes): bool {
+        $latestnote = end($notes); // Get the latest note.
+        if ($latestnote->coursenote === $params['coursenote']) {
+            return true;
+        }
+        return false;
     }
 }
