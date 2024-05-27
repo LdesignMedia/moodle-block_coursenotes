@@ -92,6 +92,6 @@ class block_coursenotes extends block_base {
      * @return array page-type prefix => true/false.
      */
     public function applicable_formats(): array {
-        return ['course-view' => true, 'site-index' => false, 'my' => true];
+        return ['course-view' => true];
     }
 }
