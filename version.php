@@ -26,6 +26,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2024052110;
+$plugin->version   = 2024052700;
 $plugin->requires  = 2022111800;
+$plugin->supported = [400, 401];
 $plugin->component = 'block_coursenotes';
