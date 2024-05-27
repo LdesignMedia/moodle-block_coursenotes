@@ -26,6 +26,7 @@
  */
 
 $string['pluginname'] = 'Course Notes';
+$string['privacy:metadata'] = 'The block_coursenotes plugin does not store any personal data.';
 $string['coursenotes'] = 'Course Notes';
 $string['nonotes'] = 'No notes yet';
 $string['savenote'] = 'Save Note';
