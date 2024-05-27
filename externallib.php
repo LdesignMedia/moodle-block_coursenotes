@@ -14,21 +14,52 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
+defined('MOODLE_INTERNAL') || die();
+
 require_once("$CFG->libdir/externallib.php");
 require_once(__DIR__ . '/classes/helper.php');
 
+/**
+ * The coursenotes block
+ *
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @package   block_coursenotes
+ * @copyright 21/05/2024 Mfreak.nl | LdesignMedia.nl - Luuk Verhoeven
+ * @author    Nihaal Shaikh
+ */
+
+/**
+ * External API for the Course Notes block.
+ *
+ * Provides methods to save and fetch course notes via web services.
+ */
 class block_coursenotes_external extends external_api {
 
-    public static function save_note_parameters() {
+    /**
+     * Defines the parameters for the save_note function
+     *
+     * @return external_function_parameters
+     */
+    public static function save_note_parameters(): external_function_parameters {
         return new external_function_parameters(
-            array(
+            [
                 'coursenote' => new external_value(PARAM_TEXT, 'The course note text'),
                 'courseid' => new external_value(PARAM_INT, 'The course ID'),
-            )
+            ]
         );
     }
 
-    public static function save_note($coursenote, $courseid) {
+    /**
+     * Save the course note
+     *
+     * @param $coursenote
+     * @param $courseid
+     *
+     * @return array
+     */
+    public static function save_note($coursenote, $courseid): array {
         global $USER, $DB;
 
         // Validate parameters.
@@ -63,24 +94,41 @@ class block_coursenotes_external extends external_api {
         return ['status' => $savenote['status'], 'message' => $savenote['message']];
     }
 
-    public static function save_note_returns() {
+    /**
+     * Returns the structure of the save_note function response
+     *
+     * @return external_single_structure
+     */
+    public static function save_note_returns(): external_single_structure {
         return new external_single_structure(
-            array(
+            [
                 'status' => new external_value(PARAM_BOOL, 'Status of the request'),
-                'message' => new external_value(PARAM_TEXT, 'Response message')
-            )
+                'message' => new external_value(PARAM_TEXT, 'Response message'),
+            ]
         );
     }
 
-    public static function fetch_notes_parameters() {
+    /**
+     * Defines the parameters for the fetch_notes function
+     *
+     * @return external_function_parameters
+     */
+    public static function fetch_notes_parameters(): external_function_parameters {
         return new external_function_parameters(
-            array(
-                'courseid' => new external_value(PARAM_INT, 'The course ID')
-            )
+            [
+                'courseid' => new external_value(PARAM_INT, 'The course ID'),
+            ]
         );
     }
 
-    public static function fetch_notes($courseid) {
+    /**
+     * Fetch the notes
+     *
+     * @param $courseid
+     *
+     * @return array
+     */
+    public static function fetch_notes($courseid): array {
         global $USER, $DB;
 
         // Validate parameters.
@@ -94,7 +142,7 @@ class block_coursenotes_external extends external_api {
         $notes = $DB->get_records('block_coursenotes', $conditions, 'timecreated ASC');
 
         // Format notes for output.
-        $notelist = array();
+        $notelist = [];
         foreach ($notes as $note) {
             $notelist[] = $note->coursenote;
         }
@@ -102,14 +150,20 @@ class block_coursenotes_external extends external_api {
         return ['status' => true, 'notes' => $notelist];
     }
 
-    public static function fetch_notes_returns() {
+    /**
+     * Returns the structure of the fetch_notes function response
+     *
+     * @return external_single_structure
+     */
+    public static function fetch_notes_returns(): external_single_structure {
         return new external_single_structure(
-            array(
+            [
                 'status' => new external_value(PARAM_BOOL, 'Status of the request'),
                 'notes' => new external_multiple_structure(
                     new external_value(PARAM_TEXT, 'Course note')
-                )
-            )
+                ),
+            ]
         );
     }
+
 }

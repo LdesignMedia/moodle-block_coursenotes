@@ -29,11 +29,18 @@ require_once(__DIR__ . '/externallib.php');
  */
 class block_coursenotes extends block_base {
 
-    public function init() {
+    /**
+     * Initializes the block
+     */
+    public function init(): void {
         $this->title = get_string('coursenotes', 'block_coursenotes');
     }
 
-    public function get_content() {
+    /**
+     * Returns the block's content
+     *
+     */
+    public function get_content(): object {
         global $USER, $DB, $COURSE, $OUTPUT;
 
         if ($this->content !== null) {
@@ -79,7 +86,12 @@ class block_coursenotes extends block_base {
         return $this->content;
     }
 
-    public function applicable_formats() {
+    /**
+     *  Which page types this block may appear on.
+     *
+     * @return array page-type prefix => true/false.
+     */
+    public function applicable_formats(): array {
         return ['course-view' => true, 'site-index' => false, 'my' => true];
     }
 }

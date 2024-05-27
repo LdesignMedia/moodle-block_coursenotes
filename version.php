@@ -30,3 +30,5 @@ $plugin->version   = 2024052700;
 $plugin->requires  = 2022111800;
 $plugin->supported = [400, 401];
 $plugin->component = 'block_coursenotes';
+$plugin->maturity = MATURITY_STABLE;
+$plugin->release = '4.1.0';

@@ -14,33 +14,43 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * block_coursenotes web services.
+ *
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @package   block_coursenotes
+ * @copyright 27/05/2024 Mfreak.nl | LdesignMedia.nl - Luuk Verhoeven
+ * @author    Nihaal Shaikh
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
-$functions = array(
-    'block_coursenotes_save_note' => array(
-        'classname'   => 'block_coursenotes_external',
-        'methodname'  => 'save_note',
-        'classpath'   => 'blocks/coursenotes/externallib.php',
+$functions = [
+    'block_coursenotes_save_note' => [
+        'classname' => 'block_coursenotes_external',
+        'methodname' => 'save_note',
+        'classpath' => 'blocks/coursenotes/externallib.php',
         'description' => 'Save the course note if conditions are met',
-        'type'        => 'write',
-        'ajax'        => true,
+        'type' => 'write',
+        'ajax' => true,
         'capabilities' => 'block/coursenotes:myaddinstance',
-    ),
-    'block_coursenotes_fetch_notes' => array(
-        'classname'   => 'block_coursenotes_external',
-        'methodname'  => 'fetch_notes',
-        'classpath'   => 'blocks/coursenotes/externallib.php',
+    ],
+    'block_coursenotes_fetch_notes' => [
+        'classname' => 'block_coursenotes_external',
+        'methodname' => 'fetch_notes',
+        'classpath' => 'blocks/coursenotes/externallib.php',
         'description' => 'Fetch all course notes for the current user and course',
-        'type'        => 'read',
-        'ajax'        => true,
+        'type' => 'read',
+        'ajax' => true,
         'capabilities' => 'block/coursenotes:myaddinstance',
-    ),
-);
+    ],
+];
 
-$services = array(
-    'coursenotes_service' => array(
-        'functions' => array('block_coursenotes_save_note', 'block_coursenotes_fetch_notes'),
+$services = [
+    'coursenotes_service' => [
+        'functions' => ['block_coursenotes_save_note', 'block_coursenotes_fetch_notes'],
         'restrictedusers' => 0,
         'enabled' => 1,
-    ),
-);
+    ],
+];
