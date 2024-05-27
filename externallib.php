@@ -68,4 +68,50 @@ class block_coursenotes_external extends external_api {
             )
         );
     }
+
+    public static function fetch_notes_parameters() {
+        return new external_function_parameters(
+            array(
+                'blockinstanceid' => new external_value(PARAM_INT, 'The block instance ID'),
+                'courseid' => new external_value(PARAM_INT, 'The course ID')
+            )
+        );
+    }
+
+    public static function fetch_notes($blockinstanceid, $courseid) {
+        global $USER, $DB;
+
+        // Validate parameters.
+        $params = self::validate_parameters(
+            self::fetch_notes_parameters(),
+            ['blockinstanceid' => $blockinstanceid, 'courseid' => $courseid]
+        );
+
+        // Fetch notes.
+        $conditions = [
+            'userid' => $USER->id,
+            'courseid' => $params['courseid'],
+            'blockinstanceid' => $params['blockinstanceid']
+        ];
+        $notes = $DB->get_records('block_coursenotes', $conditions, 'timecreated ASC');
+
+        // Format notes for output.
+        $notelist = array();
+        foreach ($notes as $note) {
+            $notelist[] = $note->coursenote;
+        }
+
+        return ['status' => true, 'notes' => $notelist];
+    }
+
+    public static function fetch_notes_returns() {
+        return new external_single_structure(
+            array(
+                'status' => new external_value(PARAM_BOOL, 'Status of the request'),
+                'notes' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'Course note')
+                )
+            )
+        );
+    }
 }

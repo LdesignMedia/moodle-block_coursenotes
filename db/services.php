@@ -26,11 +26,20 @@ $functions = array(
         'ajax'        => true,
         'capabilities' => 'block/coursenotes:myaddinstance',
     ),
+    'block_coursenotes_fetch_notes' => array(
+        'classname'   => 'block_coursenotes_external',
+        'methodname'  => 'fetch_notes',
+        'classpath'   => 'blocks/coursenotes/externallib.php',
+        'description' => 'Fetch all course notes for the current user and course',
+        'type'        => 'read',
+        'ajax'        => true,
+        'capabilities' => 'block/coursenotes:myaddinstance',
+    ),
 );
 
 $services = array(
     'coursenotes_service' => array(
-        'functions' => array ('block_coursenotes_save_note'),
+        'functions' => array('block_coursenotes_save_note', 'block_coursenotes_fetch_notes'),
         'restrictedusers' => 0,
         'enabled' => 1,
     ),
