@@ -72,8 +72,10 @@ class block_coursenotes extends block_base {
 
         // Handle form submission.
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['coursenote'])) {
+
+            $coursenote = required_param('coursenote', PARAM_TEXT);
             // Save the note.
-            block_coursenotes_external::save_note($_POST['coursenote'], $this->context->instanceid, $COURSE->id);
+            block_coursenotes_external::save_note($coursenote, $this->context->instanceid, $COURSE->id);
             // Refresh the page to see the changes.
             redirect(new moodle_url('/course/view.php', ['id' => $COURSE->id]));
         }

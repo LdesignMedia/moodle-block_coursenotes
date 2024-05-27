@@ -51,10 +51,12 @@ export const init = () => {
         }
     });
     const saveNoteAJAX = (note) => {
+        let formattedNote;
+        formattedNote = stripHtmlTags(note);
         Ajax.call([{
             methodname: 'block_coursenotes_save_note',
             args: {
-                coursenote: note,
+                coursenote: formattedNote,
                 blockinstanceid: blockInstanceId,
                 courseid: courseId
             },
@@ -71,6 +73,10 @@ export const init = () => {
                 Log.error('AJAX error: ' + JSON.stringify(error));
             }
         }]);
+    };
+
+    const stripHtmlTags = (str) => {
+        return str.replace(/<\/?[^>]+(>|$)/g, "");
     };
 
     const fetchNoteHistory = () => {
