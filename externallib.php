@@ -23,19 +23,18 @@ class block_coursenotes_external extends external_api {
         return new external_function_parameters(
             array(
                 'coursenote' => new external_value(PARAM_TEXT, 'The course note text'),
-                'blockinstanceid' => new external_value(PARAM_INT, 'The block instance ID'),
                 'courseid' => new external_value(PARAM_INT, 'The course ID'),
             )
         );
     }
 
-    public static function save_note($coursenote, $blockinstanceid, $courseid) {
+    public static function save_note($coursenote, $courseid) {
         global $USER, $DB;
 
         // Validate parameters.
         $params = self::validate_parameters(
             self::save_note_parameters(),
-            ['coursenote' => $coursenote, 'blockinstanceid' => $blockinstanceid, 'courseid' => $courseid]
+            ['coursenote' => $coursenote, 'courseid' => $courseid]
         );
 
         // Check if the note length is greater than 10 characters.
@@ -47,11 +46,10 @@ class block_coursenotes_external extends external_api {
         $conditions = [
             'userid' => $USER->id,
             'courseid' => $params['courseid'],
-            'blockinstanceid' => $params['blockinstanceid']
         ];
         $notes = $DB->get_records('block_coursenotes', $conditions, 'timecreated ASC');
 
-        // Check if the new note is the same as the latest note.
+        // If the new note is the same as the latest one, no point in saving it.
         if (!empty($notes) && helper::isduplicate($params, $notes)) {
             return ['status' => false, 'message' => 'Note is the same as the latest one'];
         }
@@ -77,26 +75,21 @@ class block_coursenotes_external extends external_api {
     public static function fetch_notes_parameters() {
         return new external_function_parameters(
             array(
-                'blockinstanceid' => new external_value(PARAM_INT, 'The block instance ID'),
                 'courseid' => new external_value(PARAM_INT, 'The course ID')
             )
         );
     }
 
-    public static function fetch_notes($blockinstanceid, $courseid) {
+    public static function fetch_notes($courseid) {
         global $USER, $DB;
 
         // Validate parameters.
-        $params = self::validate_parameters(
-            self::fetch_notes_parameters(),
-            ['blockinstanceid' => $blockinstanceid, 'courseid' => $courseid]
-        );
+        $params = self::validate_parameters(self::fetch_notes_parameters(), ['courseid' => $courseid]);
 
         // Fetch notes.
         $conditions = [
             'userid' => $USER->id,
             'courseid' => $params['courseid'],
-            'blockinstanceid' => $params['blockinstanceid']
         ];
         $notes = $DB->get_records('block_coursenotes', $conditions, 'timecreated ASC');
 

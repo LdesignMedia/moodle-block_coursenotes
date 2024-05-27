@@ -45,19 +45,15 @@ class block_coursenotes extends block_base {
 
         // Prepare data for the template.
         $data = [
-            'title' => $this->title,
-            'content' => '',
             'coursenote' => '',
             'savebutton' => get_string('savenote', 'block_coursenotes'),
-            'blockinstanceid' => $this->context->instanceid,
             'courseid' => $COURSE->id,
         ];
 
-        // Fetch notes from the database based on instance id.
+        // Fetch notes from the database.
         $conditions = [
             'userid' => $USER->id,
             'courseid' => $COURSE->id,
-            'blockinstanceid' => $this->context->instanceid,
         ];
         $notes = $DB->get_records('block_coursenotes', $conditions, 'timecreated DESC', '*', 0, 1);
 
@@ -75,7 +71,7 @@ class block_coursenotes extends block_base {
 
             $coursenote = required_param('coursenote', PARAM_TEXT);
             // Save the note.
-            block_coursenotes_external::save_note($coursenote, $this->context->instanceid, $COURSE->id);
+            block_coursenotes_external::save_note($coursenote, $COURSE->id);
             // Refresh the page to see the changes.
             redirect(new moodle_url('/course/view.php', ['id' => $COURSE->id]));
         }

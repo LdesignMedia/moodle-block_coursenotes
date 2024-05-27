@@ -37,8 +37,6 @@ export const init = () => {
     });
 
     let timeoutId;
-    // Fetch the block instance ID from the DOM.
-    const blockInstanceId = textarea.dataset.blockinstanceid;
     const courseId = textarea.dataset.courseid;
 
     textarea.addEventListener('input', () => {
@@ -57,7 +55,6 @@ export const init = () => {
             methodname: 'block_coursenotes_save_note',
             args: {
                 coursenote: formattedNote,
-                blockinstanceid: blockInstanceId,
                 courseid: courseId
             },
             done: (response) => {
@@ -83,7 +80,6 @@ export const init = () => {
         Ajax.call([{
             methodname: 'block_coursenotes_fetch_notes',
             args: {
-                blockinstanceid: blockInstanceId,
                 courseid: courseId
             },
             done: (response) => {

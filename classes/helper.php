@@ -57,7 +57,6 @@ class helper {
         $note = new stdClass();
         $note->userid = $USER->id;
         $note->courseid = $params['courseid'];
-        $note->blockinstanceid = $params['blockinstanceid'];
         $note->coursenote = $params['coursenote'];
         $note->timecreated = time();
 
