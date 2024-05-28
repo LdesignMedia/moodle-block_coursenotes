@@ -98,4 +98,38 @@ class helper {
         }
         return false;
     }
+
+    /**
+     * Fetches the latest course note for a user and course.
+     *
+     * @return mixed The latest course note or false if none found.
+     */
+    public static function fetch_latest_coursenote_for_user(): mixed {
+        global $DB, $COURSE, $USER;
+
+        $conditions = [
+            'userid' => $USER->id,
+            'courseid' => $COURSE->id,
+        ];
+
+        $notes = $DB->get_records('block_coursenotes', $conditions, 'timecreated DESC', '*', 0, 1);
+
+        return $notes ? reset($notes) : false;
+    }
+
+    /**
+     * Fetches all notes for a user and course.
+     *
+     * @return array An array of course notes.
+     */
+    public static function fetch_all_coursenotes_for_user(): array {
+        global $DB, $COURSE, $USER;
+
+        $conditions = [
+            'userid' => $USER->id,
+            'courseid' => $COURSE->id,
+        ];
+
+        return $DB->get_records('block_coursenotes', $conditions, 'timecreated ASC');
+    }
 }

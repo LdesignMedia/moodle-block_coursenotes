@@ -41,7 +41,7 @@ class block_coursenotes extends block_base {
      *
      */
     public function get_content(): object {
-        global $USER, $DB, $COURSE, $OUTPUT;
+        global $COURSE, $OUTPUT;
 
         if ($this->content !== null) {
             return $this->content;
@@ -57,15 +57,10 @@ class block_coursenotes extends block_base {
             'courseid' => $COURSE->id,
         ];
 
-        // Fetch notes from the database.
-        $conditions = [
-            'userid' => $USER->id,
-            'courseid' => $COURSE->id,
-        ];
-        $notes = $DB->get_records('block_coursenotes', $conditions, 'timecreated DESC', '*', 0, 1);
+        // Fetch the latest coursenote.
+        $latestnote = helper::fetch_latest_coursenote_for_user();
 
-        if ($notes) {
-            $latestnote = reset($notes); // Get the first (latest) record.
+        if ($latestnote) {
             $data['coursenote'] = $latestnote->coursenote;
         }
 
