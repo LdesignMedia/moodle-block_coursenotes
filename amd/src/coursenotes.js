@@ -20,9 +20,7 @@ export const init = () => {
     });
 
     document.getElementById('cancel-button').addEventListener('click', function () {
-        document.getElementById('coursenote-display').style.display = 'block';
-        document.getElementById('edit-icon').style.display = 'block'; // Show the edit icon again.
-        document.getElementById('coursenote-form').style.display = 'none';
+        window.location.reload();
     });
 
     document.getElementById('undo-button').addEventListener('click', function () {
