@@ -85,10 +85,11 @@ export const init = () => {
             done: (response) => {
                 if (response.status) {
                     noteHistory = response.notes;
-                    if (noteHistory.length > 0) {
+                    if (response.note_count > 1) {
                         document.getElementById('undo-button').style.display = 'block';
+                    } else {
+                        document.getElementById('undo-button').style.display = 'none';
                     }
-                    Log.log(response);
                     Log.log('Note history fetched successfully');
                 } else {
                     Log.log('Error fetching note history:', response.message);

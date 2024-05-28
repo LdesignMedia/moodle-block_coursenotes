@@ -147,7 +147,7 @@ class block_coursenotes_external extends external_api {
             $notelist[] = $note->coursenote;
         }
 
-        return ['status' => true, 'notes' => $notelist];
+        return ['status' => true, 'notes' => $notelist, 'note_count' => count($notelist)];
     }
 
     /**
@@ -162,6 +162,7 @@ class block_coursenotes_external extends external_api {
                 'notes' => new external_multiple_structure(
                     new external_value(PARAM_TEXT, 'Course note')
                 ),
+                'note_count' => new external_value(PARAM_INT, 'Number of course notes'),
             ]
         );
     }
