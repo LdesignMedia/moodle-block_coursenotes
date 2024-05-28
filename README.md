@@ -28,7 +28,7 @@ The block_coursenotes block stores notes by the user for a specific course.
 ---
 ### Changelog
 
-##### 4.1.0 (27.05.2024)
+##### 4.1.0 (28.05.2024)
 * Original release
 
 
