@@ -33,7 +33,7 @@ class helper {
      *
      * @return void
      */
-    public static function deleteoldestnoteifneeded($notes): void {
+    public static function deleteoldestnote($notes): void {
         global $DB;
 
         // If the user has 10 or more notes, delete the oldest one.
@@ -41,6 +41,20 @@ class helper {
             $oldestnote = reset($notes);
             $DB->delete_records('block_coursenotes', ['id' => $oldestnote->id]);
         }
+    }
+
+    /**
+     * Delete all coursenotes for the course
+     *
+     * @return void
+     */
+    public static function deletecoursenotes(): void {
+        global $DB, $COURSE;
+
+        $conditions = [
+            'courseid' => $COURSE->id,
+        ];
+        $DB->delete_records('block_coursenotes', $conditions);
     }
 
     /**

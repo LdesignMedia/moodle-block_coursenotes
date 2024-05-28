@@ -86,7 +86,7 @@ class block_coursenotes_external extends external_api {
         }
 
         // If the user has 10 or more notes, delete the oldest one.
-        helper::deleteoldestnoteifneeded($notes);
+        helper::deleteoldestnote($notes);
 
         // Insert the new note.
         $savenote = helper::savenote($params);
