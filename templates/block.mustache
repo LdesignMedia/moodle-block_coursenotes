@@ -1,0 +1,16 @@
+<div class="course-notes-block">
+    <div class="content">
+        {{#coursenote}}
+            <div id="coursenote-display">{{coursenote}}</div>
+            <a href="javascript:void(0);" class="edit-icon" id="edit-icon">✏️</a>
+        {{/coursenote}}
+    </div>
+        <form method="post" action="" id="coursenote-form">
+            <label>
+                <textarea class="w-100" name="coursenote" rows="4" cols="50" id="coursenote-textarea" data-blockinstanceid="{{blockinstanceid}}" data-courseid="{{courseid}}">{{coursenote}}</textarea>
+            </label>
+            <input type="submit" value="{{#savebutton}} {{savebutton}} {{/savebutton}}">
+            <button type="button" id="cancel-button">Cancel</button>
+            <button type="button" id="undo-button"style="display: none;">Undo</button>
+        </form>
+</div>
